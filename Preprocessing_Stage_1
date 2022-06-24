@@ -1,0 +1,13 @@
+#Raw files: T1 structural (struct.nii.gz) & fMRI scan acquired during MATB run (func.nii.gz)
+
+##Preprocessing Stage 1
+###see FEAT_preprocessing1_design.fsf for specific parameters
+
+###create transformation matrix and warpfields
+flirt -in struct_brain.nii.gz -ref func.nii.gz -omat struct2func.mat -dof 6
+
+flirt -in func.nii.gz -ref struct_brain.nii.gz -omat func2struct.mat -dof 6
+
+fnirt --in=struct --aff=struct2std.mat --cout=struct2std_warp --config=T1_2_MNI152_2mm
+
+invwarp -w struct2std_warp -o std2struct_warp -r struct_brain.nii.gz
