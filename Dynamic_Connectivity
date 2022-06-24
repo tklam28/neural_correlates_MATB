@@ -1,0 +1,8 @@
+##Dynamic connectivity
+###transform preprocessed fMRI data to standard MNI152 ICBM space
+applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm.nii.gz --in=FEAT_preprocessing2.feat/filtered_func_data.nii.gz --warp=struct2std_warp.nii.gz --premat=func2struct.mat --out=preprocessed_func_std
+
+###input preprocessed fMRI data (in standard MNI152 space) into GIFT analysis
+###see matb_ica_parameter_info.mat for Independent Component Analysis (ICA) parameters
+
+###see matb_dfnc.mat for temporal dynamic functional connectivity analysis parameters
