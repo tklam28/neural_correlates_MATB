@@ -1,0 +1,25 @@
+##Static connectivity
+###transform Laird et al. (2011) network templates to functional space
+applywarp --ref=func.nii.gz --in=DMN_laird_template.nii.gz --warp=std2struct_warp.nii.gz --postmat=struct2func.mat --interp=nn --out=DMN_func.nii.gz
+
+applywarp --ref=func.nii.gz --in=DAN_laird_template.nii.gz --warp=std2struct_warp.nii.gz --postmat=struct2func.mat --interp=nn --out=DAN_func.nii.gz
+
+applywarp --ref=func.nii.gz --in=FPNL_laird_template.nii.gz --warp=std2struct_warp.nii.gz --postmat=struct2func.mat --interp=nn --out=FPNL_func.nii.gz
+
+applywarp --ref=func.nii.gz --in=FPNR_laird_template.nii.gz --warp=std2struct_warp.nii.gz --postmat=struct2func.mat --interp=nn --out=FPNR_func.nii.gz
+
+applywarp --ref=func.nii.gz --in=SN_laird_template.nii.gz --warp=std2struct_warp.nii.gz --postmat=struct2func.mat --interp=nn --out=SN_func.nii.gz
+
+###extract BOLD time course from preprocessed fMRI data for each network
+fslmeants -i FEAT_preprocessing2.feat/stats/res4d.nii.gz -o DMN-timecourse.txt -m DMN_func.nii.gz
+
+fslmeants -i FEAT_preprocessing2.feat/stats/res4d.nii.gz -o DAN-timecourse.txt -m DAN_func.nii.gz
+
+fslmeants -i FEAT_preprocessing2.feat/stats/res4d.nii.gz -o FPNL-timecourse.txt -m FPNL_func.nii.gz
+
+fslmeants -i FEAT_preprocessing2.feat/stats/res4d.nii.gz -o FNR-timecourse.txt -m FPNR_func.nii.gz
+
+fslmeants -i FEAT-preprocessing2.feat/stats/res4d.nii.gz -o SN-timecourse.txt -m SN_func.nii.gz
+
+###combine all network time courses into single text file
+paste DMN-timecourse.txt DAN-timecourse.txt FPNL-timecourse.txt FPNR-timecourse.txt SN-timecourse.txt
