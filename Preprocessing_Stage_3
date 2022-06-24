@@ -1,0 +1,23 @@
+##Preprocessing Stage 3
+###segmentation of T1 structural into grey matter, white matter (WM), and cerebrospinal fluid (CSF)
+fast -g struct_brain.nii.gz
+
+###erode WM and CSF masks to ensure no grey matter voxels will overlap with these masks
+fslmaths struct_brain_seg_0.nii.gz -kernel 3D -ero CSF_ero
+
+fslmaths struct_brain_seg_2.nii.gz -kernel 3D -ero WM_ero
+
+###register CSF and WM masks to functional space
+flirt -in CSF_ero.nii.gz -ref func.nii.gz -applyxfm -init struct2func.mat -interp nearestneighbour -out CSF_func
+
+flirt -in WM_ero.nii.gz -ref func.nii.gz -applyxfm -init struct2func.mat -interp nearestneighbour -out WM_func
+
+###obtain BOLD time course of CSF and WM masks
+fslmeants -i FEAT_preprocessing1.feat/ICA_AROMA/denoised_func_data_nonaggr.nii.gz -o CSF-timecourse.txt -m CSF_func.nii.gz
+
+fslmeants -i FEAT_preprocessing1.feat/ ICA_AROMA/denoised_func_data_nonaggr.nii.gz -o WM-timecourse.txt -m WM_func.nii.gz 
+
+###combine CSF and WM time course into single text file
+paste CSF-timecourse.txt WM-timecourse.txt > CSF-WM-timecourse.txt
+
+###see FEAT_preprocessing2_design.fsf for specific parameters
