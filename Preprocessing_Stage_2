@@ -1,0 +1,3 @@
+##Preprocessing Stage 2
+###motion artifact removal
+python2.7 ICA_AROMA.py -feat FEAT_preprocessing1.feat -out FEAT_preprocessing1.feat/ICA_AROMA/
